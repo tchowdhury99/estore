@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{title}}
+{% endblock title %}
+
+
+
+{% block content %}
+
+<div class="col-md-4">
+	<ul class="list-group">
+		<li class="list-group-item"><a href="{% url "pages:home" %}">Home</a></li>
+	</ul>
+  </div>
+
+	 <div class="col-md-8">
+	 	<div class="row">
+			{% for p in products %}
+			<div class="col-md-4 mt-4">
+				<div class="card-deck-wrapper">
+					<div class="card-deck">
+						<div class="card">
+							<img class="card-img-top" height="250px" src="{{p.photo.url}}" alt="Card image cap">
+							<div class="card-block">
+								<h4 class="card-title text-center text-secondary"><b><a href="{% url "pages:product_by_slug" p.slug %}">{{p.title}}</a></b></h4>
+                <small> <p>{{p.summary}} <a href="{% url "pages:product_by_slug" p.slug %}">Read More</a></p></small>
+					<br>
+					
+					<a href="{% url "cart:cart_add" p.slug %}">Add to cart</a><br>
+								<p class="card-text"><h6 class="text-info font-weight-bold">Price: {{p.price}} TK</h6>
+					  <strong>Category: </strong><a href="{% url "pages:category_by_slug" p.category.slug %}">{{p.category.title}}</a><br>
+								
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			  </div>
+  {% endfor %}
+	 	</div>
+	 </div>
+
+
+
+       <div class="mx-auto mt-4 clearfix">
+
+          {% if products.has_other_pages %}
+
+            <ul class="pagination">
+               {% if products.has_previous %}
+                  <li class="page-item">
+                    <a href="?page={{products.previous_page_number}}" class="page-link">&laquo;</a>
+                  </li>
+               {% else %}
+                   <li class="page-item disabled">
+                      <a class="page-link">&laquo;</a>
+                   </li>
+               {% endif %}
+               {% for i in products.paginator.page_range %}
+                 {% if products.number == i %}
+
+                  <li class="page-item active">
+                    <a class="page-link">{{i}}</a>
+                  </li>
+                 {% else %}
+                      <li class="page-item">
+                        <a href="?page={{i}}" class="page-link">{{i}}</a>
+                      </li>
+                 {% endif %}
+               {% endfor %}
+               {% if products.has_next %}
+                  <li class="page-item">
+                    <a href="?page={{products.next_page_number}}" class="page-link">&raquo;</a>
+                  </li>
+               {% else %}
+                   <li class="page-item disabled">
+                      <a class="page-link">&raquo;</a>
+                   </li>
+               {% endif %}
+            </ul>
+
+          {% else %}
+
+          {% endif %}
+
+  </div>
+
+
+
+{% endblock content %}
+
+
